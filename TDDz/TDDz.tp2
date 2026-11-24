@@ -1,0 +1,244 @@
+BACKUP ~TDDz/backup~
+//AUTHOR ~shadowlich~
+SUPPORT ~https://forums.beamdog.com/discussion/4841/the-darkest-day/~
+VERSION ~v1.3.3~
+
+ALWAYS
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAM ForceClearTempFolder
+
+	INCLUDE ~%MOD_FOLDER%/Lib/a7_tools.tpa~
+
+	ACTION_IF GAME_IS ~eet~ BEGIN
+		OUTER_SET bg2_chapter = 12
+	END ELSE BEGIN
+		OUTER_SET bg2_chapter = 0
+	END
+	OUTER_FOR (i=1; i<=10; i=i+1) BEGIN
+		OUTER_SET bg2_chapter = bg2_chapter + 1
+		OUTER_SPRINT name_source ~bg2_chapter_%i%~
+		OUTER_SET EVAL ~%name_source%~ = bg2_chapter
+	END
+
+	// any tra files used in LANGUAGE need to be reloaded after UTF-8 conversion
+	ACTION_DEFINE_ARRAY tra#reload BEGIN tp2 setup END
+
+	// No exception, everything needs to be converted
+	ACTION_DEFINE_ARRAY tra#noconvert BEGIN END
+
+	LAF HANDLE_CHARSETS
+		INT_VAR
+			infer_charsets = 1
+		STR_VAR
+			tra_path = EVAL ~%MOD_FOLDER%/Translations~
+			iconv_path = EVAL ~%MOD_FOLDER%/tools/iconv/win32~
+			reload_array = tra#reload
+			noconvert_array = tra#noconvert
+	END
+END
+//Don't use AUTO_EVAL_STRINGS, this would break the EXECUTE_TOOL macro
+//AUTO_EVAL_STRINGS
+//AUTO_TRA ~TDDz/Translations/%s~
+AUTO_TRA ~TDDz/TEMP/Translations~
+
+LANGUAGE 	~English~
+			~English~
+			~TDDz/Translations/English/Setup.tra~
+			~TDDz/Translations/English/tp2.tra~
+
+LANGUAGE 	~Russian(aerie-ru)~
+			~Russian~
+			~TDDz/Translations/Russian/setup.tra~
+			~TDDz/Translations/Russian/tp2.tra~
+
+LANGUAGE 	~Polish (by SoM, part of CoB Clan, in co-operation with TB Team)~
+			~Polish~
+			~TDDz/Translations/Polish/setup.tra~
+			~TDDz/Translations/Polish/tp2.tra~
+
+LANGUAGE 	~German(Leonardo Watson)~
+			~German~
+			~TDDz/Translations/German/setup.tra~
+			~TDDz/Translations/German/tp2.tra~
+
+LANGUAGE 	~Francais(Isaya)~
+			~French~
+			~TDDz/Translations/french/setup.tra~
+			~TDDz/Translations/french/tp2.tra~
+
+LANGUAGE 	~Italian(ilot)~
+			~Italian~
+			~TDDz/Translations/Italian/setup.tra~
+			~TDDz/Translations/Italian/tp2.tra~
+
+LANGUAGE 	~Spanish(Clan REO)~
+			~Spanish~
+			~TDDz/Translations/Spanish/setup.tra~
+			~TDDz/Translations/Spanish/tp2.tra~
+
+// TODO: TTPOT.itm has weird name in vanilla BG2EE...is it normal???
+
+
+// Notes:
+// - INITDLG.d @override!
+// - DDTROLL1.BAF makes trolls killable
+// - Is GTRSK002 useless? ex: LeaveAreaLUA("dd9007","GTRSK002",[381.331],12)
+
+
+// TODO Force add empty area.bcs
+// TODO Re-check EE minimap
+
+
+BEGIN @901000
+	DESIGNATED 0
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	COPY ~TDD/Bam~ ~override~
+        INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~CORE~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~CORE~ END
+
+COPY_EXISTING ~sahoty01.cre~ ~override/tzhoty01.cre~
+    WRITE_ASCII 0x280 ~tzhoty01~ #8
+
+LAF HANDLE_AUDIO
+  STR_VAR
+    audio_path = ~TDD/ogg~ // the audio are from TDD
+    oggdec_path = ~TDDz/tools/oggdec~ // the oggdec is from TDDz
+END
+
+COPY ~TDDz/PVRZ~ ~override~
+
+BEGIN @901001
+	DESIGNATED 1
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	REQUIRE_COMPONENT "TDDZ.tp2" "0" @901111
+
+	INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~TROLLFORD~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~TROLLFORD~ END
+
+COPY ~TDDz/PVRZ~ ~override~
+
+BEGIN @901002
+	DESIGNATED 2
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	REQUIRE_COMPONENT "TDDZ.tp2" "0" @901111
+
+	INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~ESPURTA~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~ESPURTA~ END
+
+COPY ~TDDz/PVRZ~ ~override~
+
+BEGIN @901003
+	DESIGNATED 3
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	REQUIRE_COMPONENT "TDDZ.tp2" "0" @901111
+
+	INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~PURSKAL~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~PURSKAL~ END
+
+BEGIN @901004
+	DESIGNATED 4
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	REQUIRE_COMPONENT "TDDZ.tp2" "0" @901111
+
+	INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~RIATAVIN~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~RIATAVIN~ END
+
+COPY ~TDDz/PVRZ~ ~override~
+
+BEGIN @901005
+	DESIGNATED 5
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	REQUIRE_COMPONENT "TDDZ.tp2" "0" @901111
+
+	INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~ONSETOfTheDARKESTDAY~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~ONSETOfTheDARKESTDAY~ END
+
+COPY ~TDDz/PVRZ~ ~override~
+
+BEGIN @901006
+	DESIGNATED 6
+	REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet~ ~~
+	REQUIRE_COMPONENT "TDDZ.tp2" "0" @901111
+
+	INCLUDE ~%MOD_FOLDER%/Lib/Importer.tpa~
+		LAF ImportComponent STR_VAR aComp = ~ROBILARD~ END
+	INCLUDE ~%MOD_FOLDER%/Lib/Helpers.tpa~
+		LAF DeleteTempFolder STR_VAR aComp = ~ROBILARD~ END
+
+
+/////////////////////////////
+BEGIN @901007
+	DESIGNATED 1000
+//REQUIRE_PREDICATE (MOD_IS_INSTALLED "TDDz.tp2" "2") OR (MOD_IS_INSTALLED "TDDz.tp2" "3") OR (MOD_IS_INSTALLED "TDDz.tp2" "4") "No TDD component detected."
+//REQUIRE_COMPONENT "BGGO.TP2" "0" "The main component must be installed before"
+REQUIRE_PREDICATE MOD_IS_INSTALLED "bggo.tp2" (ID_OF_LABEL "bggo.tp2" "baldurs_gate_graphical_overhaul" ) @901112
+REQUIRE_PREDICATE (MOD_IS_INSTALLED "TDDz.tp2" "2") OR (MOD_IS_INSTALLED "TDDz.tp2" "3") OR (MOD_IS_INSTALLED "TDDz.tp2" "4") @901113
+REQUIRE_PREDICATE GAME_IS ~eet bgt~ @901114
+
+ACTION_IF GAME_IS ~eet~ BEGIN
+	ACTION_DEFINE_ASSOCIATIVE_ARRAY remapped_tis_tdd BEGIN
+		"DD1900"    => "BG1900" //%BanditCamp%"
+		"DD2300"    => "BG2300" //%FriendlyArmInn%"
+		"DD3300"    => "BG3300" //%Beregost%"
+		"DD8000"    => "BG2900" //%Larswood%"
+	END
+END
+
+ACTION_IF GAME_IS ~bgt~ BEGIN
+	ACTION_DEFINE_ASSOCIATIVE_ARRAY remapped_tis_tdd BEGIN
+		"DD1900"    => "AR8700" //%BanditCamp%"
+		"DD2300"    => "AR6800" //%FriendlyArmInn%"
+		"DD3300"    => "AR6700" //%Beregost%"
+		"DD8000"    => "AR9000" //%Larswood%"
+	END
+END
+
+ACTION_DEFINE_ASSOCIATIVE_ARRAY turn_off_at_night BEGIN // turn off sleeping animals at night
+		bird => 1
+		eagle => 1
+		vultur => 1
+		seagul => 1
+END
+
+ACTION_PHP_EACH remapped_tis_tdd AS TDDARE => BG1ARE BEGIN
+	ACTION_IF FILE_EXISTS_IN_GAME ~%TDDARE%.are~ BEGIN
+		COPY_EXISTING ~%TDDARE%.are~ ~override~
+		PATCH_IF SOURCE_SIZE > 0x11b BEGIN
+			PATCH_IF (((BYTE_AT 0x48) << 7) & BIT7) BEGIN // Toggle only outdoor areas
+				WRITE_BYTE 0x48 (THIS | BIT6 | BIT1 | BIT2) // Toggle extended night flag (BIT6) and day/night flag (BIT1) and weather flag (BIT2)
+				GET_OFFSET_ARRAY actors 0x54 4 0x58 2 0 0 0x110		// turn off creatures at night time
+				PHP_EACH actors AS i => off BEGIN
+					READ_ASCII off + 0x80 cre_resref
+					TO_LOWER cre_resref
+					PATCH_IF VARIABLE_IS_SET $turn_off_at_night("%cre_resref%") BEGIN
+						WRITE_LONG off + 0x40 0x1ffe0 // 05:30 to 17:29
+					END
+				END
+			END
+			WRITE_ASCIIE 0x8 ~%BG1ARE%~ #8
+		END
+		BUT_ONLY
+	END
+END
+
+
+//=============================================================================
+/* USED DURING INITIAL DEVELOPMENT - NOT USED NOW
+//BEGIN ~DEBUG~
+//	NO_LOG_RECORD
+//	DESIGNATED 99
+//	INCLUDE ~%MOD_FOLDER%/Lib/Translations.tpa~
+//		LAM DispatchTraFiles
+*/
